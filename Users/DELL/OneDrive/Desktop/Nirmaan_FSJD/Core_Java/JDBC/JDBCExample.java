@@ -2,29 +2,24 @@ package JDBC;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class JDBCExample {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/data?useSSL=false&serverTimezone=UTC";
+        String user = "root";
+        String password = "your_password";
 
-	public static void main(String[] args) {
-		String url = "jdbc:mysql://localhost:3306/data";
-		String user = "root";
-		String password = "root";
+        try {
+            // Optional for newer JDBC versions
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
-		try (Connection connection = DriverManager.getConnection(url, user, password);
-				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery("SELECT * FROM users")) {
-
-			while (resultSet.next()) {
-				int id = resultSet.getInt("id");
-				String name = resultSet.getString("name");
-				System.out.println("ID: " + id + ", Name: " + name);
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+            Connection con = DriverManager.getConnection(url, user, password);
+            System.out.println("Connection successful!");
+        } catch (ClassNotFoundException e) {
+            System.out.println("MySQL JDBC Driver not found!");
+        } catch (SQLException e) {
+            System.out.println("Connection failed: " + e.getMessage());
+        }
+    }
 }
